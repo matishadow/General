@@ -1,1 +1,9 @@
-# General
+= Ideas
+
+. Online white board
+. Spooky malware
+. Ftp server
+. Chrome plugin which saves tickets to calendar
+. .bmp viewer in Rust
+. Slack bot which web scrapes
+. Locate toilets
