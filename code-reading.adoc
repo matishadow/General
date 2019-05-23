@@ -1,0 +1,260 @@
+= Czytanie kodów 101 dla Magdy
+:toc:
+:toclevels: 4
+:toc-title: Spis treści
+
+== Fragment książki https://ksiegarnia.pwn.pl/Zrozumiec-programowanie,216633888,p.html["Zrozumieć programowanie" Gynvael Coldwind]
+=== Czytanie nieznanego języka
+Pracując przy niewielkich projektach, często korzystamy tylko z jednego języka programowania, a więc jeśli zachodzi potrzeba zrozumienia fragmentów jego kodu, mamy do czynienia jedynie z językiem, który i tak już znamy. Taka sytuacja ma miejsce, kiedy musimy zapoznać się z kodem stworzonym przez inne osoby pracujące przy naszym projekcie, z kodem jednego z używanych komponentów lub ze swoim własnym, który stworzyliśmy dawno temu i nie do końca pamiętamy, jak funkcjonował. Analogicznie sprawa ma się w przypadku czytania fragmentów innych projektów napisanych w znanym nam języku, choć w tym wypadku odmienne reguły formatowania oraz nieznane komponenty mogą wyglądać nieco egzotycznie i spowolnić analizę.
+
+Sprawa wygląda zupełnie inaczej w przypadku eksploracji większych projektów – w takiej sytuacji bardzo szybko dociera się do innych, niekoniecznie znanych nam (lub znanych w niewielkim stopniu) języków oraz technologii. Często identycznie jest w przypadku posiłkowania się źródłami środowiska wykonania (run-time/execution environment) danego języka oraz jego standardowych i dodatkowych bibliotek. Jedynie w nielicznych przypadkach szczegółowy opis interesującego nas fragmentu znajdziemy w oficjalnej dokumentacji projektu.footnote:[Niestety praktyka pokazuje, że dokumentacja często jest niekompletna, nieaktualna, pomija interesujące nas szczegóły lub po prostu w ogóle nie istnieje.], częściej  jednak będziemy musieli sięgać do źródeł.
+
+.Jak się okazuje, czytanie i stosunkowo prawidłowa interpretacja kodu w nieznanym języku jest jak najbardziej możliwa – a z im większą ich liczbą miało się do czynienia, tym jest to łatwiejsze. Wynika to z kilku prostych czynników:
+* Języki programowania z danej grupy paradygmatycznej footnote:[Przykładowym paradygmatem w kontekście programowania jest np. programowanie obiektowe lub funkcyjne.] są często bardzo podobne składniowo, gramatycznie i w sposobie użycia.
+* Nazwy funkcji, klas, metod, struktur, a także słowa kluczowe, dyrektywy itd. w zdecydowanej większości przypadków składają się z połączenia angielskich słów lub ich skrótów. Już samo rozwinięcie skrótów i przetłumaczenie wyrazów na język polski niesie ze sobą znaczną porcję informacji.
+* Program to nie tylko sam kod, ale również komentarze oraz dane (w szczególności komunikaty o błędach), które często są bardzo wymowne.
+
+Oczywiście od wszystkich wymienionych czynników istnieją także wyjątki, natomiast w większości wypadków już samo wykorzystanie wymienionych informacji i wskazówek wystarcza do zrozumienia wybranego fragmentu. W razie gdyby to jednak zawiodło, pozostaje nam konsultacja z ogólnodostępną dokumentacją danego języka, choćby w formie tablic informatycznych (potocznie zwanych cheatsheetami).
+
+==== Podobieństwa i różnice
+
+W językach wywodzących się z paradygmatów programowania proceduralnego czy obiektowego (na takich bowiem skupiam się w tej książce) wiele wyrażeń ma albo identyczny, albo przynajmniej zbliżony zapis. To samo dotyczy dostępności różnych konstrukcji składniowych, których lwia część występuje w większości języków z tych rodzin.
+
+Na przykład w C, C+\+, Objective-C, Java, PHP, JavaScript, Perl oraz w innych językach początek i koniec bloku kodu oznacza się znakami { oraz }. Wyjątkiem od tej reguły jest np. Python, w którym o przynależności do danego bloku decyduje głębokość wcięć. Inną konwencję przyjmuje również Pascal, Delphi oraz ADA footnote:[💘], które w tym celu używają słów kluczowych begin oraz end. Kolejnym przykładem może być zapis wywołania funkcji – praktycznie w każdym języku z tej grupy jest to po prostu nazwa funkcji, po której następuje lista rozdzielonych przecinkami parametrów umieszczonych w okrągłych nawiasach. Niektóre języki (np. Ruby czy D) dopuszczają w pewnych przypadkach pominięcie nawiasów. Można ich również nie stosować np. w językach Python (2:7) oraz PHP w przypadku dyrektywy print (występującej w obu tych językach), a także w niektórych zastosowaniach sizeof oraz typeof w językach C oraz C++.
+
+Wyrażenia arytmetyczno-logiczne i przypisanie wartości do zmiennej również są w zasadzie identyczne w większości języków (wyjątkiem jest np. Pascal, używający digrafu := do oznaczenia przypisania). Różnice w tej kwestii dotyczą głównie dostępności i sposobu oznaczenia niektórych operacji. Na przykład wyrażenie `a = (2 + b) * 3` będzie zapisane tak samo w większości języków, ale już znak dzielenia może oznaczać różne działania. Dokładniej: wynikiem operacji `1 / 2` w większości języków będzie 0, ponieważ literały 1 oraz 2 zostaną zinterpretowane jako stałe typu całkowitego, a więc i wynikiem dzielenia będzie liczba całkowita. Wyjątkiem jest Pascal oraz Python 3, w których znak / oznacza konkretnie dzielenie na liczbach rzeczywistych footnote:[Dzielenie całkowite w Pascalu można uzyskać, używając słowa kluczowego DIV, a w Python 3 za pomocą operatora // (podwójny znak dzielenia). Ten sam digraf jest używany jako początek komentarza w niektórych innych językach.] (a ściślej zmiennoprzecinkowych), a także JavaScript, w którym nie istnieje oddzielny typ dla liczb całkowitych footnote:[Jak wspominam w części II książki, jedynym liczbowym typem w języku JavaScript jest zmiennoprzecinkowy typ Number, będący odpowiednikiem double w językach C, C++ czy Java, czy float w PHP oraz Python.] – w tych przypadkach wynikiem będzie 0.5. Idąc dalej: w kilku językach występuje operator potęgowania, którego nie znajdziemy w innych – operację tę w języku Python oznacza się digrafem **, a w VB.NET znakiem ^ footnote:[Użycie ^, czyli karety (popularnie zwanej „daszkiem”) do oznaczenia potęgowania może dziwić, szczególnie że w większości języków znakiem tym oznacza się bitowy XOR. Ma to podłoże historyczne – w Dartmouth BASIC (czyli pierwszym, oryginalnym języku z tej rodziny) potęgowanie było reprezentowane za pomocą znaku ↑ (strzałka w górę). Podobnie było w kolejnych wersjach języka BASIC, ale z czasem znak ↑ zniknął z klawiatur, a pojawił się dobrze nam znany „daszek” (kareta), który jednak wizualnie podobny jest do poprzednika – został więc zaadoptowany w językach z rodziny BASIC do oznaczenia operacji potęgowania.]. Innym przykładem może być dość charakterystyczny operator ===, występujący w tej postaci m.in. w językach PHP, ActionScript oraz JavaScript, który oznacza równość co do wartości oraz typu footnote:[W językach o stosunkowo słabym typowaniu możliwe jest porównanie zmiennych o bardzo różnych typach, operacja równości co do wartości jest więc zazwyczaj niewystarczająca.].
+
+Oczywiście, im bardziej zagłębimy się w dany język, tym więcej charakterystycznych wyrażeń dla niego znajdziemy. Przykładem może być dość nietypowe użycie operatora << przy wypisywaniu danych na standardowe wyjście w C++: +
+`std::cout << 1234 << std::endl;`
+
+Podsumowując: w większości przypadków różnice pomiędzy językami sprowadzają się do kosmetyki, co znacznie ułatwia i przyspiesza analizę obcego kodu. W przypadku nieznanych wyrażeń możemy zawsze sięgnąć do dokumentacji lub kursów poświęconych danemu językowi programowania. Gorzej jest w przypadku tzw. fałszywych przyjaciół (false friends), czyli wyrażeń wyglądających tak samo jak zapisy ze znanego nam języka, ale jednak oznaczających coś innego – w każdym momencie analizy należy podchodzić więc z pewnym dystansem do wyciągniętych wniosków i w razie potrzeby je weryfikować.
+
+==== Studium przypadku
+Opierając się na opisanych prawidłowościach i wskazówkach, przeanalizujmy wspólnie przykładowy fragment kodu. Czytelników nieznających języków z rodziny C/C++ zachęcam do próby wykonania analizy we własnym zakresie, a potem porównania wniosków z moimi, wskazanymi dalej. W analizie pominę wszystkie informacje, do których wywnioskowania potrzebna jest znajomość danego języka; ujmę natomiast pewne wnioski, do jakich można dojść, posiadając ogólną wiedzę z informatyki i programowania (na potrzeby analizy przyjmę założenie, że czytelnik dysponuje podstawową wiedzą z tej dziedziny). Dodatkowo przy każdym wniosku wskażę, która metoda pozwoliła mi do niego dojść; zaznaczę również konkluzje, które początkowo wydawały się poprawne, ale takimi ostatecznie nie były. W tym celu posłużę się następującymi oznaczeniami:
+
+* *{WO}* – wniosek wyciągnięty dzięki wiedzy ogólnej o informatyce i programowaniu;
+* *{A}* – zachowanie analogiczne lub identyczne ze spotykanymi w innych językach programowania, czyli „podobne wyrażenie widziałem już w innych językach”;
+* *{TR}* – wniosek wyciągnięty z rozwinięcia skrótów i przetłumaczenia nazwy/zwrotu z języka angielskiego na język polski;
+* *{ERR}* – wniosek, do którego doszedłem, jest błędny (mimo że brzmi sensownie w danym kontekście).
+
+Kod, na którym będę pracował, wygląda następująco:
+
+[source,cpp]
+----
+int calc_file_md5(const char *fname,
+                  unsigned char result[16])
+{
+  FILE *f;
+  MD5_CTX md5;
+  char buffer[1024];
+  size_t ret;
+ 
+  f = fopen(fname, "rb");
+  if (!f) {
+    return -1;
+  }
+ 
+  MD5_Init(&md5);
+ 
+  while(1) {
+    ret = fread(buffer, 1, sizeof(buffer), f);
+    if (ret == 0) {
+      break;
+    }
+ 
+    MD5_Update(&md5, buffer, ret);
+  }
+ 
+  fclose(f);
+  MD5_Final(result, &md5);
+  return 0;
+}
+----
+
+Zacznijmy od początku:
+
+[source,cpp]
+----
+int calc_file_md5(const char *fname,
+                  unsigned char result[16]) {
+----
+Bardzo dużo mówi nam już sama nazwa funkcji – _calc_file_md5_, czyli „wylicz MD5 pliku”{TR}. MD5 oczywiście oznacza tutaj funkcję skrótu, która z danych (bajtów) wylicza 128-bitowy hasz{WO}. O ile po nazwie możemy domyślić się, jaki jest cel danej funkcji, to nadal pozostaje otwarte pytanie: w jaki dokładnie sposób realizuje swoje zadanie?
+
+Zakładając, że parametry funkcji są wylistowane w nawiasie{A}, mamy do czynienia z dwoma parametrami:
+
+* const char *fname – biorąc pod uwagę, że w nazwie funkcji pojawiło się słowo „file”, przedrostek „f” pochodzi zapewne od niego. W wolnym tłumaczeniu otrzymujemy więc wyrażenie: „stały znak *nazwapliku”{TR}. Zakładam, że nie znamy znaczenia znaku gwiazdki w tym wyrażeniu, więc na razie ją zignorujemy. Z pozostałej części możemy wnioskować, że nazwapliku jest typu{A} stały znak (tylko jeden?), co niestety ma niewiele sensu – nazwy plików prawie nigdy nie mają tylko jednego znaku. Bazując na tym, można dojść do wniosku, że zapewne chodzi o stały string lub wiele stałych znaków (czyżby * oznaczało mnogość?{WO, ERR} footnote:[W informatyce w wielu miejscach używa się znaku * do oznaczenia mnogości (np. w wyrażeniach regularnych, UML-u czy przy operowaniu na plikach z linii poleceń), niemniej jednak w języku C znak * oznacza wskaźnik, a więc poprawnym wnioskiem byłoby stwierdzenie, że „nazwa pliku jest wskaźnikiem na zero lub więcej znaków”.]).
+* unsigned char result[16] – słowo „result” (wynik){TR} jest oczywiste, natomiast reszta jest bardziej zagadkowa – unsigned char to „znak bez znaku”, a raczej „znak bez znaku matematycznego”{TR}; gdyby zamiast char był np. int, moglibyśmy założyć, że mamy do czynienia z liczbą naturalną, ale jak się ma do tego typ znakowy? Liczba w nawiasie prawdopodobnie mówi o długości tablicy, co by się zgadzało, ponieważ możemy założyć, że jeden znak zajmuje jeden bajt (czyli 8 bitów){WO}, a więc 128 bitów MD5 to akurat 16 bajtów. Dlaczego funkcja dostaje wynik już na początku? To nie ma oczywiście sensu, więc zapewne jest to jakiegoś rodzaju referencja do zmiennej, do której wynik ma zostać dopiero zapisany{A, WO}.
+
+Pozostaje nam słowo „int” przed nazwą funkcji, które prawdopodobnie oznacza liczbę całkowitą (int, od integer){A, TR}. Łatwo można się domyślić, że jest to typ zwracany funkcji {A, WO}.
+
+[source,cpp]
+----
+FILE *f;
+MD5_CTX md5;
+char buffer[1024];
+size_t ret;
+----
+
+Wygląda na to, że w powyższych linijkach nie dzieje się nic interesującego – nie widzimy w nich żadnych operacji matematycznych czy wywołań funkcji, więc są to zapewne zmienne lokalne{A, WO}. Niemniej jednak przeanalizujmy poszczególne deklaracje – być może ich zrozumienie okaże się przydatne:
+
+* FILE *f – „file” to plik{TR}, więc zmienna f będzie prawdopodobnie używana jako uchwyt do pliku{WO, A}, co ma sens, biorąc pod uwagę nazwę funkcji.
+* MD5_CTX md5 – skrót CTX pochodzi od słowa „kontekst” (context){TR}, którym w programowaniu oznacza się zazwyczaj zestaw różnych elementów wchodzących w skład mniej lub bardziej szeroko rozumianego środowiska wykonania{WO}. Prawdopodobnie md5 będzie więc takim zestawem zmiennych pośrednich używanych przy wyliczaniu funkcji skrótu MD5 (aż chce się powiedzieć „obiektem”{A}).
+* char buffer[1024] – bufor 1024 znaków{A, WO, TR}.
+* size_t ret – ponieważ mamy do czynienia z typami zmiennych, sufiks „t” zapewne oznacza typ (type), a więc size_t może oznaczać „typ [oznaczający] wielkość”{TR}. Słowem „ret” często określa się tzw. return value{WO}, czyli możemy założyć, że mamy do czynienia ze zmienną, w której będzie przechowywana zwrócona wartość{TR}, prawdopodobnie odnosząca się do pewnej wielkości. W tym momencie zbyt wiele nam to nie mówi, ale zapewne więcej dowiemy się, gdy zobaczymy, w jaki sposób zmienna jest wykorzystywana w kodzie.
+
+[source,cpp]
+----
+f = fopen(fname, "rb");
+if (!f) {
+  return -1;
+}
+----
+
+Jak już ustaliliśmy, „f” jest prefiksem słowa „file”, więc tłumacząc pierwszą linię na język polski, otrzymujemy wyrażenie „otwórz plik o nazwie fname”. Trochę bardziej zagadkowy może być ciąg „rb”. Litera r zapewne oznacza read, czyli „odczyt”{TR, A, WO}, ale b może stanowić zagadkę. W tym momencie wydaje się to jednak mało istotne, przejdźmy zatem dalej (alternatywnie można sięgnąć do dokumentacji).
+
+Wynik wywołania funkcji fopen jest zapisywany do zmiennej f, co potwierdza naszą wcześniejszą hipotezę, że jest to prawdopodobnie rodzaj uchwytu do pliku{A}. Pozostała część kodu wygląda jak typowe sprawdzanie błędów{A}, pomińmy je więc i przejdźmy dalej.
+
+[source,cpp]
+----
+MD5_Init(&md5);
+----
+
+Kolejne proste wyrażenie – zainicjowanie kontekstu/obiektu md5{TR, A}.
+[source,cpp]
+----
+while(1) {
+  ret = fread(buffer, 1, sizeof(buffer), f);
+  if (ret == 0) {
+    break;
+  }
+----
+
+Początek pętli jest oczywisty – jest ona nieskończona{A}, tj. będzie wykonywana, dopóki 1 będzie oznaczało wyrażenie prawdziwe {TR, WO}.
+
+Dalej mamy do czynienia z wywołaniem funkcji fread – „czytaj plik” {TR}, która w parametrach przyjmuje bufor, tajemniczą jedynkę (którą prawdopodobnie można zignorować), wielkość bufora (sizeof, czyli „wielkość”{TR}) oraz uchwyt pliku. Jak możemy się domyślić, bufor zostanie wypełniony danymi z pliku.
+
+Zwracany przez funkcję fread wynik zostaje zapisany w zmiennej ret (która, jak pamiętamy, wyraża pewną wielkość). Jeśli chodzi o naturę zwracanej wartości, to nie są to zapewne dane (te trafiają do bufora), prawdopodobnie będzie to więc ilość faktycznie odczytanych danych{A}. Miałoby to sens, szczególnie biorąc pod uwagę drugą część fragmentu, czyli opuszczenie pętli w przypadku, gdy wielkość (liczba) odczytanych danych będzie wynosiła zero bajtów {A}.
+
+[source,cpp]
+----
+MD5_Update(&md5, buffer, ret);
+----
+
+Końcówka pętli wygląda dość prosto – „uaktualnij MD5”{TR}; dane pobierz z bufora w ilości odczytanej z pliku.
+
+[source,cpp]
+----
+fclose(f);
+MD5_Final(result, &md5);
+return 0;
+----
+
+Podobnie jest w przypadku końcowego fragmentu kodu funkcji „zamknij plik”{TR, A}, oraz prawdopodobnie „zapisz/przekaż finalny wynik MD5 do result”, po czym opuść funkcję, zwracając 0.
+
+Podsumowując: funkcja liczy sumę MD5 pliku. W tym celu otwiera plik, inicjuje obiekt kontekstu MD5, po czym uaktualnia wartość skrótu o odczytywane dane. Na koniec zamyka otwarte uchwyty i przekazuje dotychczasowo wyliczoną sumę MD5 do tablicy result.
+
+Całkiem nieźle, jak na analizę kodu w nieznanym języku.
+
+==== Uwagi na koniec
+
+Przytoczoną analizę przeprowadziłem, idąc od początku funkcji w kierunku jej końca, po jednej lub kilka linii naraz; zachęcam czytelników do wykonania kilku pierwszych analiz właśnie w ten sposób. W praktyce jednak analizę często wykonuje się inaczej: ignorując większość kodu, szukamy fragmentów, które nas interesują i których przeczytanie niesie ze sobą stosunkowo dużą porcję informacji, a następnie ewentualnie cofamy się i wykonujemy dodatkową analizę, uzupełniając brakującą wiedzę (np. sprawdzając typ zmiennej, sposób jej inicjalizacji czy to, jak wcześniej była używana). Bardzo wiele o funkcji mówi już to, jakie inne funkcje i metody są przez nią wywoływane (zachęcam do spojrzenia pod tym kątem na kod, który wcześniej analizowaliśmy). Z drugiej strony, analizę niektórych fragmentów możemy pominąć, ponieważ rzadko kiedy przynoszą interesujące nas informacje – przykładem może być obsługa błędów (z pominięciem komunikatów tekstowych w nich zawartych), którą często można zupełnie przeskoczyć, tak jak zrobiłem to w opisanym przykładzie. Ostatecznie przebieg analizy zależy w znacznym stopniu od jej celu – w tym rozdziale przyjąłem założenie, że podstawowym celem jest zrozumienie sposobu działania głównego algorytmu, ewentualnie prześledzenie celu i przeznaczenia parametrów funkcji. Jeśli naszym zadaniem jest jednak znalezienie błędu w funkcji, to analiza może pójść innym torem, a przykładowe fragmenty kodu odpowiedzialne za weryfikowanie poprawności zwracanych wartości i obsługiwanie błędów będą wręcz kluczowe.
+
+W pozostałych rozdziałach książki umieściłem wiele listingów – niektóre z nich są w znacznym stopniu wyjaśnione, ale w części przypadków przyjąłem założenie, iż czytelnik wykona ich analizę we własnym zakresie, na przykład korzystając z wiedzy zdobytej w tym rozdziale.
+
+==== Ćwiczenie - W sposób analogiczny do opisanego w tym rozdziale przeanalizuj poniższy kod:
+
+[source,cpp]
+----
+class VecFont():
+  def __init__(self):
+    self.__gfx_engine = None
+    self.__font = None
+ 
+  def set_gfx_engine(self, gfx):
+    self.__gfx_engine = gfx
+ 
+  def load_font_from_string(self, font_string):
+    # Note: The font string is a DEFLATEd serialized array of glyphs. Each
+    # glyph is an array of paths. Each path is an array of coordinates.
+    # This must be deserialized into Python arrays.
+    font_string = font_string.decode("zlib")
+    data = iter(font_string)
+# Read all letters.
+    self.__font = []
+    while True:
+      number_of_paths = self.__read_uint8(data)
+      if number_of_paths == 0:
+        break
+ 
+      paths = []
+      for _ in xrange(number_of_paths):
+        number_of_coords = self.__read_uint8(data)
+        coords = []
+        for _ in xrange(number_of_coords):
+          coords.append((
+              self.__read_float(data),   # X
+              self.__read_float(data)))  # Y
+        paths.append(coords)
+ 
+      self.__font.append(paths)
+ 
+  def render_string(self, text, sx, sy, font_size):
+    character_x = sx
+    character_y = sy
+ 
+    for character in text:
+      translate_x = self.render_char(
+          ord(character), character_x, character_y, font_size)
+      translate_x += int(0.1 * font_size)
+ 
+      character_x += translate_x
+ 
+  def render_char(self, ch, sx, sy, font_size):
+    max_x = 0
+    for paths in self.__font[ch]:
+
+last = None
+      for coords in paths:
+        if coords[0] > max_x: max_x = coords[0]
+ 
+        if last == None:  # Skip first point.
+          last = coords
+          continue
+ 
+        self.__gfx_engine.draw_line(
+            int(sx + last[0] * font_size),
+            int(sy + last[1] * font_size),
+            int(sx + coords[0] * font_size),
+            int(sy + coords[1] * font_size))
+ 
+        last = coords
+
+    return int(max_x * font_size)
+ 
+  def __read_uint8(self, data):
+    return ord(data.next())
+ 
+  def __read_float(self, data):
+    b = ""
+    for _ in xrange(4):
+      b += data.next()
+    return struct.unpack(">f", b)[0]
+ 
+def test_vec_font():
+  FONT = ("eJxNUiFQw0AQTL6BTFUcMg4Zh0z+BQJR0RkEIq6yghlkZR04XOtwrcO1Dp"
+          "c6XOpwqcMVh2R381+amZ9NLrd3t3tvBhEe93T8ifxjj/27KRHkh91stsQ4"
+          "ic4e91gU9rbZCef4ruvaDCvkqshbngubZmfT5xfharVm3HbdoWrbPVE570"
+          "VBrBaLZeAn9nM0EoH4PZ2G40hAzAxZ9pzOaMVxA5Pnq67VCqgcxNSK0jz/"
+          "wjIBRYg0wr5mmYMiFhPebLYOSuPU3rd7lQFVrajsoywVoyoy/D83whjXq7"
+          "WbdIdYJstPHDkWTB6ebEfX4JhGpmN0iyzU5hZclmXCO/RlpUnvINFwCUws"
+		  "PSG+DGqDUin3jVlGEugr2wBNEjI4gAqXvTj3gNUgZpimBlzFFJT/NWBe4e"
+          "9spvmBbox54Q8zGSOq3LjXqjzPN3xhQihkTtctTGOxCFlOhMKE989eLZY2"
+          "jJv1dV2e51xxnJb+YmtjfunaNe4aL4WaDvo7GqaSq38Mnx3i"). decode("base64")
+ 
+  vf = VecFont()
+  vf.load_font_from_string(FONT)
+  vf.set_gfx_engine(TestGraphicsEngine())
+  vf.render_string("\0\1\2\3\4\5\6\7\x08\x09\x0a\x0b", 100, 100, 70)
+----
+
+== Praktyczna praktyka - Astro
