@@ -258,3 +258,125 @@ def test_vec_font():
 ----
 
 == Praktyczna praktyka - Astro
+
+=== Najczęściej wykorzystywane funkcje
+==== *mdi_GF* (Get First)
+
+Pobiera rekord z bazy danych. +
+Patrząc po argumentach łatwo wywnioskować z jakiej tabeli pobierany jest rekord, jak również warunki po których szukamy. +
+Przykładowo: `cc = mdi_GF1( r08t1_h1, mdi_RetLog, "F,shortr08,EQ", &shortr08 );` pobiera rekord z tabeli R08T1 po kolumnie _shortr08_. +
+
+Warunków może być tutaj wiele:
+
+[source,cpp]
+----
+// Check if trip already exists
+cc = mdi_GF3( r08t1_h2, mdi_RetCode, "F,oppdate,EQ", &PlanDate,
+             "A,routeno,EQ", PlanRoute.r,
+             "A,tripno,EQ", &PlanSequence );
+----
+
+Tutaj szukamy po _oppdate_, _routeno_ oraz _tripno_.
+
+==== *mdi_GN* (Get Next)
+
+Nieodłączny kompan *mdi_GF*. *mdi_GF* pobiera pierwszy rekord a *mdi_GN* kolejne rekordy.
+Do pobranych rekordów aplikowane są takie same warunki jakie były wcześniej przy *mdi_GF*.
+
+==== *mdi_AD* (Add)
+Dodanie nowego rekordu do bazy.
+
+==== *mdi_SA* (Safe Add)
+Prawie to samo co przy *mdi_SA*.
+
+==== *mdi_UP* (Update)
+Update na danym rekordzie.
+
+==== *mdi_DE* (Delete)
+Usunięcie rekordu.
+
+==== *mdi_GetOrgRec* (Get Original Records)
+Podobnie jak przy *mdi_GF*.
+
+==== *mdi_GPA* (Get Pending Add)
+Podobnie jak przy *mdi_GF*.
+
+==== *mdi_Count*
+Zliczenie rekordów, które spełniają zadane warunki.
+
+Przykład:
+
+[source,cpp]
+----
+ToDo = mdi_Count6(O40T9_h1, mdi_RetCode, "",
+                  "F,o40t9ord,BW", o40t9ord_session_prefix,
+                  "A,o40t9id,EQ", &cons_id,
+                  "A,o40t9sta,EQ", &status_created,
+                  "A,o40t9tp,EQ", &box_type_primary,
+                  "A,o40t9atp,EQ",&atp_type,
+                  "A,o40t9sep,EQ", &not_separate_packing );
+----
+
+==== *mdi_Push*
+Wrzucenie rekordu do pamięci globalnej. Zwykle używane przy wysłaniu danych na etykietę.
+
+==== *mdi_Pull*
+Pobranie danych z pamięci globalnej.
+
+==== *mdi_PushOld*
+Podobnie jak *mdi_Push*.
+
+==== *mdi_PullOld*
+Podobnie jak *mdi_Pull*.
+
+==== *RetOk*
+Zwrócenie wartości z funkcji.
+
+Przeglądając logi niestety nie wiem co dana funkcja zwróciła.
+Możemy jednak w łatwy sposób stwierdzić miejsce wyjścia z funkcji.
+
+Przykładowo mając poniższą funkcję:
+
+image::ret-ok.png[]
+
+Wejście do tej funkcji będzie zalogowane z linijką nr 70 (numer tej linijki będzie znajdował się w logu przy nazwie 'CheckAllZoneSequences').
+
+A jeżeli chodzi o wyjście z tej funkcji to zalogowane mogą zostać dwa przypadki.
+Jeśli zostanie zalogowana linijka nr 58 to możemy wnioskować, że coś poszło nie tak (funkcja zwróciła _mgbad_).
+Jeśli zostanie zalogowana linijka nr 64 to znaczy, że funkcja zwróciła _mgok_.
+
+==== *RetOkPush*
+To samo co w przypadku *RetOk* plus wyświetlenie wiadomości po stronie klienta (M2/O2).
+
+==== *RetErr*
+* Zapisuje błąd do logu
+* zapisuje błąd do S17T1
+
+==== *RetErrPush*
+To samo co *RetErr* plus wyświetlenie wiadomości.
+
+==== *fxBlank*
+Wypełnia daną zmienną spacjami.
+
+==== *fxIsEq*
+Porównanie dwóch napisów.
+
+==== *madebug*
+Zapisuje wiadomość zwykle z _wbuf_ do logu.
+
+==== *SysPar_GetSysXXX* (gdzie XXX to typ)
+Pobranie parametru systemowego (z S01T2) danego typu.
+
+
+=== Praca domowa
+
+==== Poziom łatwy
+http://opengrok.rd.consafe1.org/source/s?refs=srvs_DropPoint_GetStatus&project=9.20[link do opengroka]
+==== Poziom średni
+http://opengrok.rd.consafe1.org/source/s?refs=srvs_SpecialFunc_GetShortageMha&project=9.20[link do opengroka]
+==== Poziom trudny
+http://opengrok.rd.consafe1.org/source/s?refs=srvs_L54T3_BoxTypeRules_IsTotWeightReached&project=9.20[link do opengroka]
+
+
+=== Najczęstsze błędy przy używaniu bazy danych
+http://wiki.rd.consafe1.org/wiki/index.php/MDI_Interface_for_Astro_troubleshooting[Link do wiki. Nie żeby czytać ale żeby wiedzieć było że takie coś jest.]
