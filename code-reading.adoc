@@ -1,5 +1,6 @@
 = Czytanie kodów 101 dla Magdy
 :toc:
+:data-uri:
 :toclevels: 4
 :toc-title: Spis treści
 
@@ -350,7 +351,7 @@ To samo co w przypadku *RetOk* plus wyświetlenie wiadomości po stronie klienta
 
 ==== *RetErr*
 * Zapisuje błąd do logu
-* zapisuje błąd do S17T1
+* Zapisuje błąd do S17T1
 
 ==== *RetErrPush*
 To samo co *RetErr* plus wyświetlenie wiadomości.
@@ -367,16 +368,17 @@ Zapisuje wiadomość zwykle z _wbuf_ do logu.
 ==== *SysPar_GetSysXXX* (gdzie XXX to typ)
 Pobranie parametru systemowego (z S01T2) danego typu.
 
+=== Najczęstsze błędy przy używaniu bazy danych
+http://wiki.rd.consafe1.org/wiki/index.php/MDI_Interface_for_Astro_troubleshooting[Link do wiki. Nie żeby czytać ale żeby wiedzieć było że takie coś jest.]
 
 === Praca domowa
 
 ==== Poziom łatwy
 http://opengrok.rd.consafe1.org/source/s?refs=srvs_DropPoint_GetStatus&project=9.20[link do opengroka]
+
 ==== Poziom średni
 http://opengrok.rd.consafe1.org/source/s?refs=srvs_SpecialFunc_GetShortageMha&project=9.20[link do opengroka]
+
 ==== Poziom trudny
 http://opengrok.rd.consafe1.org/source/s?refs=srvs_L54T3_BoxTypeRules_IsTotWeightReached&project=9.20[link do opengroka]
 
-
-=== Najczęstsze błędy przy używaniu bazy danych
-http://wiki.rd.consafe1.org/wiki/index.php/MDI_Interface_for_Astro_troubleshooting[Link do wiki. Nie żeby czytać ale żeby wiedzieć było że takie coś jest.]
