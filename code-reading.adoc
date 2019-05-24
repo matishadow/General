@@ -362,11 +362,22 @@ Wypełnia daną zmienną spacjami.
 ==== *fxIsEq*
 Porównanie dwóch napisów.
 
+==== *fxcpy*
+Skopiowanie jednego napisu do drugiego.
+
 ==== *madebug*
 Zapisuje wiadomość zwykle z _wbuf_ do logu.
 
+==== *mci_MsgOk*
+Wysłanie wiadomości do klienta (M2/O2).
+
 ==== *SysPar_GetSysXXX* (gdzie XXX to typ)
 Pobranie parametru systemowego (z S01T2) danego typu.
+
+==== *LicKey_IsAvailable*
+Sprawdzenie Licence Key.
+
+
 
 === Najczęstsze błędy przy używaniu bazy danych
 http://wiki.rd.consafe1.org/wiki/index.php/MDI_Interface_for_Astro_troubleshooting[Link do wiki. Nie żeby czytać ale żeby wiedzieć było że takie coś jest.]
