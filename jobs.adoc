@@ -1,0 +1,10 @@
+.Job offers
+|===
+|Company Name   |Offer link             | Tests? | Close to underground | Core | Linux | Small
+
+|Axa            |https://bit.ly/34fRS6Y | Some   | Rather yes           | no?  | no    | rather no
+|Xtb            |https://bit.ly/2TeaZrB | No     | Rather yes           | yes? | yes   | rather no
+|Onwelo         |https://bit.ly/3jlaBSR | No     | yes                  | yes? | yes   | rather no
+|Objectivity    |https://bit.ly/2HmuCvd | No?    | Free parking         | no?  | no    | ?
+|GMV INNOVATING |https://bit.ly/3ohpv0i | No?    | Yes                  | yes  | yes   | ?
+|===
